@@ -3,7 +3,10 @@ compatibility_date = "2024-09-10"
 # compatibility_flags = [ "nodejs_compat" ]
 
  [vars]
- MY_VAR = "my-variable"
+DATABASE_URL=""
+JWT_SECRET = "abcdefghh"
+
+# MY_VAR = "my-variable"
 
 # [[kv_namespaces]]
 # binding = "MY_KV_NAMESPACE"
