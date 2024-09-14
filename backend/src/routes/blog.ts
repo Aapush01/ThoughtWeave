@@ -34,6 +34,7 @@ blogRouter.use("/*", async (c, next) => {
     }
 });
 
+
 blogRouter.post('/', async (c) => {
     const body = await c.req.json();
     const authorId = c.get('userId');
@@ -54,4 +55,70 @@ blogRouter.post('/', async (c) => {
     })
 
 })
+blogRouter.put('/', async (c) => {
+    const body = await c.req.json();
+    const authorId = c.get('userId');
+    const prisma = new PrismaClient({
+		datasourceUrl: c.env?.DATABASE_URL	,
+	}).$extends(withAccelerate())
+  
+    const blog = await prisma.blog.update({
+        where: {
+            id: body.id
+        },
+        data: {
+            title: body.title,
+            content: body.content, 
+        }
+    })
 
+    return c.json({
+        id: blog.id
+    })
+
+})
+
+//pagination practice here
+
+blogRouter.get('/bulk', async (c) => { 
+    const prisma = new PrismaClient({
+		datasourceUrl: c.env?.DATABASE_URL	,
+	}).$extends(withAccelerate())
+  
+    const blog = await prisma.blog.findMany();
+
+    return c.json({
+         blog
+    })
+
+})
+
+blogRouter.get('/:id', async (c) => {
+    const id = c.req.param("id");
+    const prisma = new PrismaClient({
+		datasourceUrl: c.env?.DATABASE_URL	,
+	}).$extends(withAccelerate())
+  
+    try{
+        const blog = await prisma.blog.findFirst({
+            where: {
+                id: Number(id)
+            },
+        })
+    
+        return c.json({
+            id: blog
+        })
+    }catch(e) {
+        c.status(411);
+        return c.json({
+            message: "Error while fatching blog post"
+        })
+      
+    }
+
+})
+
+ 
+
+ 
