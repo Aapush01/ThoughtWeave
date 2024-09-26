@@ -45,7 +45,7 @@ blogRouter.post("/", async (c) => {
     data: {
       title: body.title,
       content: body.content,
-      authorId: Number(authorId),
+      // authorId: Number(authorId),
     },
   });
 
