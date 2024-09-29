@@ -1,3 +1,4 @@
+import { createBlogInput, updateBlogInput } from "@aapush02/thoughtweave-common";
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { Hono } from "hono";
@@ -36,6 +37,14 @@ blogRouter.use("/*", async (c, next) => {
 
 blogRouter.post("/", async (c) => {
   const body = await c.req.json();
+  const { success } = createBlogInput.safeParse(body);
+  if(!success) {
+    c.status(411);
+    return c.json({
+      message: "Inputs are not correct"
+    })
+  }
+
   const authorId = c.get("userId");
   const prisma = new PrismaClient({
     datasourceUrl: c.env?.DATABASE_URL,
@@ -45,7 +54,7 @@ blogRouter.post("/", async (c) => {
     data: {
       title: body.title,
       content: body.content,
-      // authorId: Number(authorId),
+      authorId: authorId
     },
   });
 
@@ -53,9 +62,18 @@ blogRouter.post("/", async (c) => {
     id: blog.id,
   });
 });
+
+
 blogRouter.put("/", async (c) => {
   const body = await c.req.json();
-  const authorId = c.get("userId");
+  const { success } = updateBlogInput.safeParse(body);
+  if(!success) {
+    c.status(411);
+    return c.json({
+      message: "Inputs are not correct"
+    })
+  }
+  
   const prisma = new PrismaClient({
     datasourceUrl: c.env?.DATABASE_URL,
   }).$extends(withAccelerate());
@@ -82,7 +100,18 @@ blogRouter.get("/bulk", async (c) => {
     datasourceUrl: c.env?.DATABASE_URL,
   }).$extends(withAccelerate());
 
-  const blog = await prisma.blog.findMany();
+  const blog = await prisma.blog.findMany({
+    select: {
+      content: true,
+      title: true,
+      id: true,
+      author: {
+        select: {
+          name: true
+        }
+      }
+    }
+  });
 
   return c.json({
     blog,
@@ -98,8 +127,18 @@ blogRouter.get("/:id", async (c) => {
   try {
     const blog = await prisma.blog.findFirst({
       where: {
-        id: Number(id),
+        id: id,
       },
+      select: {
+        id: true,
+        title: true,
+        content:true,
+        author: {
+          select: {
+            name: true
+          }
+        }
+      }
     });
 
     return c.json({
