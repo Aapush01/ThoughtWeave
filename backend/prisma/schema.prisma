@@ -13,27 +13,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Blog{
-  id          Int      @id @default(autoincrement())
-  title       String
-  content     String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
+// initialize the schema.
 
 model User {
-  id       String   @id @default(uuid())
-  email    String   @unique
+  id       String  @id @default(uuid())
+  email    String  @unique
   name     String?
   password String
-  posts    Post[]
+  blogs    Blog[]
 }
 
-model Post {
-  id        String   @id @default(uuid())
+model Blog {
+  id        String  @id @default(uuid())
   title     String
   content   String
-  published Boolean  @default(false)
-  author    User     @relation(fields: [authorId], references: [id])
+  published Boolean @default(false)
+  author    User    @relation(fields: [authorId], references: [id])
   authorId  String
 }
