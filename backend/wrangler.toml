@@ -4,7 +4,7 @@ compatibility_flags = [ "nodejs_compat" ]
 
 [vars]
 
-DATABASE_URL=""
+DATABASE_URL="Put_Your_Prisma_URL_Here"
 
 JWT_SECRET=""
 
