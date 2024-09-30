@@ -44,37 +44,37 @@ To set up the project locally, ensure you have the following installed:
 
 1. Clone the repository:
 
-   \`\`\`bash
+   ```bash
    git clone https://github.com/Aapush01/ThoughtWeave.git
    cd ThoughtWeave
-   \`\`\`
+   ```
 
 2. Install the dependencies:
 
-   \`\`\`bash
+   ```bash
    yarn install
-   \`\`\`
+   ```
 
 3. Set up the environment variables:
 
    Create a `.env` file in the root directory with the following variables:
 
-   \`\`\`bash
+   ```bash
    DATABASE_URL=your_postgres_database_url
    JWT_SECRET=your_jwt_secret
-   \`\`\`
+   ```
 
 4. Run database migrations:
 
-   \`\`\`bash
+   ```bash
    yarn prisma migrate dev
-   \`\`\`
+   ```
 
 5. Start the development server:
 
-   \`\`\`bash
+   ```bash
    yarn dev
-   \`\`\`
+   ```
 
 6. You can now visit the app at `http://localhost:3000`!
 
