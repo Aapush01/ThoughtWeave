@@ -8,6 +8,7 @@
     "@aapush02/thoughtweave-common": "^1.0.0",
     "@prisma/client": "^5.20.0",
     "@prisma/extension-accelerate": "^1.2.0",
+    
     "hono": "^4.6.3",
     "prisma": "^5.20.0"
   },
